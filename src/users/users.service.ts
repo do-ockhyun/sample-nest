@@ -1,23 +1,16 @@
 import { Injectable } from '@nestjs/common';
-
-export type User = any;
+import { User } from './user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'misolab',
-      password: '1111',
-    },
-    {
-      userId: 2,
-      username: 'ohdo',
-      password: '1234',
-    },
-  ];
+  constructor(private userRepository: UserRepository) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  findUser(username: string): Promise<User | undefined> {
+    return this.userRepository.findUserByUsername(username);
+  }
+
+  join(username: string, password: string) {
+    return this.userRepository.createUser(username, password);
   }
 }

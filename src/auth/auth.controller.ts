@@ -1,4 +1,11 @@
-import { Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Get,
+  Body,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -10,6 +17,13 @@ export class AuthController {
   @Get()
   index() {
     return 'username, password';
+  }
+
+  @Post('join')
+  async join(@Body() payload) {
+    console.log('payload', payload);
+    const { password, ...result } = await this.authService.join(payload);
+    return result;
   }
 
   @UseGuards(LocalAuthGuard)
